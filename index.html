@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nachie's Love Corner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            overflow: hidden;
+            position: relative;
+            color: white;
+            padding: 20px;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff5a92;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: floatUp 6s infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .nachie-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            margin-top: 40px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .nachie-image {
+            width: 150px;
+            transition: transform 0.5s ease;
+        }
+
+        .happy { animation: shake 0.5s ease-in-out infinite alternate; }
+        .sad { animation: droop 0.5s ease-in-out forwards; }
+
+        @keyframes shake { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
+        @keyframes droop { 0% { transform: translateY(0); } 100% { transform: translateY(20px); } }
+
+        .message {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            margin-top: 20px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons { margin-top: 20px; }
+
+        button {
+            font-size: 18px;
+            padding: 12px 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-btn, .next, .open-msg { background-color: #ff69b4; color: white; }
+        .start-btn:hover, .next:hover, .open-msg:hover { background-color: #ff4081; }
+
+        .yes { background-color: #32CD32; color: white; }
+        .yes:hover { background-color: #228B22; }
+
+        .no { background-color: #FF4500; color: white; }
+        .no:hover { background-color: #B22222; }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            color: #333;
+        }
+
+        .popup h2 {
+            font-family: 'Pacifico', cursive;
+            color: #ff4081;
+        }
+
+        .popup p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .close-btn {
+            background-color: #ff4081;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .close-btn:hover { background-color: #d63384; }
+
+        .pixelated-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .password-prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .password-prompt input {
+            font-size: 18px;
+            padding: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .password-prompt button {
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .password-prompt button:hover {
+            background-color: #ff4081;
+        }
+
+        .password-prompt .error {
+            color: #ff4500;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="password-prompt" id="password-prompt">
+        <h2>Enter Password</h2>
+        <input type="password" id="password-input" placeholder="Type the password...">
+        <button onclick="checkPassword()">Submit</button>
+        <p class="error" id="password-error"></p>
+    </div>
+
+    <div id="content" style="display: none;">
+        <h1>💖 I AM NACHIE 💖</h1>
+
+        <script>
+            for (let i = 0; i < 10; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+                document.body.appendChild(heart);
+            }
+        </script>
+
+        <div class="nachie-container">
+            <img id="nachie-image" src="nachie.png" alt="Nachie" class="nachie-image">
+            <p class="message" id="nachie-message">HAPPY VALENTINE'S DAY MOMMY 🥹<br>NACHIE MISSES YOU SO MUCH</p>
+            <div class="buttons" id="buttons">
+                <button class="start-btn" onclick="startConversation()">Start</button>
+            </div>
+        </div>
+
+        <p class="pixelated-text">Sorry, pixelated si Nachie 😔</p>
+
+        <div id="popup" class="popup">
+            <h2>📩 Message from your baby</h2>
+            <p id="popup-message"></p>
+            <button class="close-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("password-input").value;
+            const errorMessage = document.getElementById("password-error");
+            if (password === "nachie") {
+                document.getElementById("password-prompt").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                errorMessage.innerText = "Incorrect password. Please try again.";
+            }
+        }
+
+        function startConversation() {
+            document.getElementById("buttons").innerHTML = "";
+            setTimeout(() => {
+                showQuestion("Do you miss me, Mommy?", handleFirstAnswer);
+            }, 1000);
+        }
+
+        function showQuestion(question, callback) {
+            document.getElementById("nachie-message").innerText = question;
+            document.getElementById("nachie-image").classList.remove("happy", "sad");
+            document.getElementById("buttons").innerHTML = `
+                <button class='yes' onclick='${callback.name}(true)'>Yes</button>
+                <button class='no' onclick='${callback.name}(false)'>No</button>
+            `;
+        }
+
+        function handleFirstAnswer(answer) {
+            document.getElementById("nachie-message").innerText = answer ? "I LOVE YOU MOMMY ❤️" : "😢";
+            document.getElementById("nachie-image").classList.toggle(answer ? "happy" : "sad");
+            document.getElementById("buttons").innerHTML = `<button class="next" onclick="nextQuestion()">Next</button>`;
+        }
+
+        function nextQuestion() {
+            showQuestion("How about Dada, do you miss him?", handleSecondAnswer);
+        }
+
+        function handleSecondAnswer(answer) {
+            document.getElementById("nachie-message").innerText = answer ? "Daddy missed you so much 🥹" : "😭";
+            document.getElementById("nachie-image").classList.toggle(answer ? "happy" : "sad");
+            document.getElementById("buttons").innerHTML = `<button class="next" onclick="showFinalMessage()">Open Message</button>`;
+        }
+
+        function showFinalMessage() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("popup-message").innerHTML = `
+                Mommy, Happy Valentine's Day. 🥹💖 Nachie and Dada miss you so much.<br><br>
+                No matter what happens, I will always be grateful for the love and memories we shared.<br><br>
+                I hope you’re happy and taking care of yourself. You’ll always have a special place in my heart.<br><br>
+                UNTA MA OKAY NA ANG TANAN💕
+            `;
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
